@@ -1,9 +1,19 @@
 FROM openjdk:17-jdk-slim
 
-WORKDIR /app
+ENV APP_HOME /app
+ENV MAVEN_HOME /usr/share/maven
+ENV MAVEN_CONFIG /root/.m2
 
-COPY target/*.jar app.jar
+RUN apt-get update && \
+    apt-get install -y maven && \
+    rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+WORKDIR $APP_HOME
+
+COPY . .
+
+RUN mvn package -DskipTests
 
 EXPOSE 8080
+
+CMD ["java", "-jar", "target/camera-test-0.0.1-SNAPSHOT.jar"]
