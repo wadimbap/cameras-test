@@ -52,7 +52,8 @@ public class CameraServiceImpl implements CameraService {
         return webClient.get()
                 .uri(camera.getSourceDataUrl())
                 .retrieve()
-                .bodyToMono(SourceData.class).onErrorResume( e -> {
+                .bodyToMono(SourceData.class)
+                .onErrorResume( e -> {
                     System.err.println("Error fetching source data: " + e.getMessage());
                     return Mono.empty();
                 });
